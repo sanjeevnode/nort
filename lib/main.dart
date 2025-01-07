@@ -5,6 +5,7 @@ import 'package:nort/app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
+
   FlutterNativeSplash.remove();
   runApp(const App());
 }

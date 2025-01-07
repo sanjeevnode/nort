@@ -96,7 +96,7 @@ class CustomPrimaryButton extends StatelessWidget {
                   color: AppColors.light100,
                 ),
           ),
-        ]
+        ],
       ],
     );
   }

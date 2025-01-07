@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:nort/view/home.dart';
 import 'package:nort/view/login_screen.dart';
 import 'package:nort/view/onboarding.dart';
+import 'package:nort/view/register_screen.dart';
 
 import 'app_route_name.dart';
 
 class AppRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-
       case AppRouteNames.login:
         return _buildMaterialPageRoute(
           const LoginScreen(),
@@ -24,6 +24,11 @@ class AppRouter {
         return _buildMaterialPageRoute(
           const HomePage(),
           name: AppRouteNames.home,
+        );
+      case AppRouteNames.register:
+        return _buildMaterialPageRoute(
+          const RegisterScreen(),
+          name: AppRouteNames.register,
         );
       default:
         return _buildMaterialPageRoute(const Scaffold());

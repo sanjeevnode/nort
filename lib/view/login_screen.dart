@@ -15,12 +15,29 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final ValueNotifier<ButtonState> _buttonStateNotifier = ValueNotifier<ButtonState>(ButtonState.disable);
+
+
+  @override
+  void initState() {
+    _emailController.addListener(_validateOnTextChange);
+    _passwordController.addListener(_validateOnTextChange);
+    super.initState();
+  }
 
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
+  }
+
+  void _validateOnTextChange() {
+    if (_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty) {
+      _buttonStateNotifier.value = ButtonState.enable;
+    } else {
+      _buttonStateNotifier.value = ButtonState.disable;
+    }
   }
 
   @override
@@ -34,6 +51,9 @@ class _LoginScreenState extends State<LoginScreen> {
           children: [
             Image.asset(
               "assets/images/auth_screen_banner.png",
+              width: sc.width,
+              height: sc.height * 0.5,
+              fit: BoxFit.cover,
             ),
             // const SizedBox(height: 30),
             Padding(
@@ -71,10 +91,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   const SizedBox(height: 24),
                   SizedBox(
                     width: double.infinity,
-                    child: CustomPrimaryButton(
-                      label: "Login",
-                      onPressed: () {
-                        debugPrint("Login");
+                    child: ValueListenableBuilder<ButtonState>(
+                      valueListenable: _buttonStateNotifier,
+                      builder: (context, buttonState, child) {
+                        return CustomPrimaryButton(
+                          label: "Login",
+                          buttonState: buttonState,
+                          onPressed:() {
+                            debugPrint("Login");
+                          }
+                        );
                       },
                     ),
                   ),
@@ -84,12 +110,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     children: [
                       Text(
                         "Don't have an account ?",
-                        style: AppTextStyle.textMdMedium,
+                        style: AppTextStyle.textMdMedium.copyWith(
+                          color: AppColors.dark500,
+                        ),
                       ),
                       const SizedBox(width: 8),
                       GestureDetector(
                         onTap: () {
-                          debugPrint("Sign Up");
+                          Navigator.of(context)
+                              .pushReplacementNamed("/register");
                         },
                         child: Text(
                           "Register now",
