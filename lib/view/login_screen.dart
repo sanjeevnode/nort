@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nort/constants/button_state.dart';
+import 'package:nort/cubit/app_cubit.dart';
 import 'package:nort/theme/app_colors.dart';
 import 'package:nort/theme/app_text_style.dart';
 import 'package:nort/widgets/custom_primary_button.dart';
@@ -89,20 +93,26 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ValueListenableBuilder<ButtonState>(
-                      valueListenable: _buttonStateNotifier,
-                      builder: (context, buttonState, child) {
-                        return CustomPrimaryButton(
-                          label: "Login",
-                          buttonState: buttonState,
-                          onPressed:() {
-                            debugPrint("Login");
-                          }
-                        );
-                      },
-                    ),
+                  BlocBuilder<AppCubit,AppState>(
+                    builder: (context,state) {
+                      return SizedBox(
+                        width: double.infinity,
+                        child: ValueListenableBuilder<ButtonState>(
+                          valueListenable: _buttonStateNotifier,
+                          builder: (context, buttonState, child) {
+                            return CustomPrimaryButton(
+                              label: "Login",
+                              buttonState: ButtonState.enable,
+                              onPressed:() {
+                                debugPrint("Login");
+                                context.read<AppCubit>().fetchUsers();
+                                log("User: ${state.user}");
+                              }
+                            );
+                          },
+                        ),
+                      );
+                    }
                   ),
                   const SizedBox(height: 16),
                   Row(

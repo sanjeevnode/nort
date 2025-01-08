@@ -1,8 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nort/constants/button_state.dart';
+import 'package:nort/cubit/app_cubit.dart';
 import 'package:nort/theme/app_colors.dart';
 import 'package:nort/theme/app_text_style.dart';
+import 'package:nort/utils/hash.dart';
 import 'package:nort/widgets/custom_primary_button.dart';
 import 'package:nort/widgets/custom_text_field.dart';
 
@@ -44,6 +49,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
+  Future<void> _register() async {
+    final String email = _emailController.text.trim();
+    final String password = _passwordController.text.trim();
+    final String userName = _userNameController.text.trim();
+
+    await context.read<AppCubit>().register(
+      username: userName,
+      email: email,
+      password: password,
+    );
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
     final sc = MediaQuery.of(context).size;
@@ -57,15 +76,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                 SizedBox(height: sc.height * 0.015),
-                Center(
-                  child: SvgPicture.asset(
-                    'assets/icons/logo.svg',
-                    width: 55,
-                    height: 55,
-                  ),
+                 SizedBox(height: sc.height * 0.05),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/icons/logo.svg',
+                      width: 44,
+                      height: 44,
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      "Nort",
+                      style: AppTextStyle.displayH3.copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: sc.height * 0.1),
+                SizedBox(height: sc.height * 0.08),
+                Text(
+                  "Create an account",
+                  style: AppTextStyle.text3xlBold,
+                ),
+                const SizedBox(height: 24),
                 Text(
                   " Username",
                   style: AppTextStyle.textMdMedium.copyWith(
@@ -103,20 +137,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   isPassword: true,
                 ),
                 const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  child: ValueListenableBuilder<ButtonState>(
-                    valueListenable: _buttonStateNotifier,
-                    builder: (context, buttonState, child) {
-                      return CustomPrimaryButton(
-                          label: "Register",
-                          buttonState: buttonState,
-                          onPressed:() {
-                            debugPrint("Register");
-                          }
-                      );
-                    },
-                  ),
+                BlocBuilder<AppCubit,AppState>(
+                  builder: (context,state) {
+                    return SizedBox(
+                      width: double.infinity,
+                      child: ValueListenableBuilder<ButtonState>(
+                        valueListenable: _buttonStateNotifier,
+                        builder: (context, buttonState, child) {
+                          return CustomPrimaryButton(
+                              label: "Register",
+                              buttonState: state.isAddingUser ? ButtonState.loading : buttonState,
+                              onPressed:() {
+                                debugPrint("Register");
+                                _register();
+                              }
+                          );
+                        },
+                      ),
+                    );
+                  }
                 ),
                 const SizedBox(height: 16),
                 Row(
@@ -131,10 +170,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(width: 8),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushReplacementNamed("/login");
+                        Navigator.of(context)
+                            .pushReplacementNamed("/login");
                       },
                       child: Text(
-                        "Login",
+                        "Login now",
                         style: AppTextStyle.textMdMedium.copyWith(
                           color: AppColors.primary,
                         ),
