@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:nort/app.dart';
-import 'package:nort/data/database.dart';
-import 'package:nort/repository/user_repository.dart';
+import 'package:nort/data/local/database.dart';
+import 'package:nort/data/repository/user_repository_impl.dart';
 import 'package:sqflite/sqflite.dart';
 
 void main() async {
@@ -12,7 +12,7 @@ void main() async {
   FlutterNativeSplash.remove();
 
   final Database db = await AppDatabase().database;
-  final UserRepository userRepository = UserRepository(db: db);
+  final UserRepositoryImpl userRepository = UserRepositoryImpl(db: db);
 
   runApp(
     App(

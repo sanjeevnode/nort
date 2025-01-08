@@ -2,9 +2,9 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:nort/repository/user_repository.dart';
+import 'package:nort/data/model/user_model.dart';
+import 'package:nort/domain/repository/user_repository.dart';
 
-import '../model/user_model.dart';
 
 part 'app_state.dart';
 

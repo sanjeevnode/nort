@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:nort/view/home.dart';
-import 'package:nort/view/login_screen.dart';
-import 'package:nort/view/onboarding.dart';
-import 'package:nort/view/register_screen.dart';
+import 'package:nort/ui/view/home.dart';
+import 'package:nort/ui/view/login_screen.dart';
+import 'package:nort/ui/view/onboarding.dart';
+import 'package:nort/ui/view/register_screen.dart';
 
 import 'app_route_name.dart';
 

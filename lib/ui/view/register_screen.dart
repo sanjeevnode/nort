@@ -3,13 +3,12 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nort/constants/button_state.dart';
-import 'package:nort/cubit/app_cubit.dart';
-import 'package:nort/theme/app_colors.dart';
-import 'package:nort/theme/app_text_style.dart';
-import 'package:nort/utils/hash.dart';
-import 'package:nort/widgets/custom_primary_button.dart';
-import 'package:nort/widgets/custom_text_field.dart';
+import 'package:nort/core/constants/button_state.dart';
+import 'package:nort/core/theme/app_colors.dart';
+import 'package:nort/core/theme/app_text_style.dart';
+import 'package:nort/domain/cubit/app_cubit.dart';
+import 'package:nort/ui/widgets/custom_primary_button.dart';
+import 'package:nort/ui/widgets/custom_text_field.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});

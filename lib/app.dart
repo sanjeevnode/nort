@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nort/cubit/app_cubit.dart';
-import 'package:nort/repository/user_repository.dart';
-import 'package:nort/routes/app_router.dart';
-import 'package:nort/theme/app_theme.dart';
-import 'package:nort/view/login_screen.dart';
+import 'package:nort/data/repository/user_repository_impl.dart';
+import 'package:nort/domain/cubit/app_cubit.dart';
 import 'package:sqflite/sqflite.dart';
+
+import 'core/theme/app_theme.dart';
+import 'ui/routes/app_router.dart';
+import 'ui/view/login_screen.dart';
 
 class App extends StatelessWidget {
   const App({
     super.key,
-    required UserRepository userRepository,
+    required UserRepositoryImpl userRepository,
     required Database db,
   })  : _userRepository = userRepository,
         _db = db;
 
-  final UserRepository _userRepository;
+  final UserRepositoryImpl _userRepository;
   final Database _db;
 
   @override

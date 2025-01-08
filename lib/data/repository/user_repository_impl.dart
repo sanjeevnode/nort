@@ -1,16 +1,18 @@
 import 'dart:developer';
 
-import 'package:nort/model/user_model.dart';
-import 'package:nort/utils/hash.dart';
+import 'package:nort/core/utils/hash.dart';
+import 'package:nort/data/model/user_model.dart';
+import 'package:nort/domain/repository/user_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
-class UserRepository {
-  UserRepository({
+class UserRepositoryImpl implements UserRepository {
+  UserRepositoryImpl({
     required Database db,
   }) : _db = db;
 
   final Database _db;
 
+  @override
   Future<int> addUser(User user) async {
     try {
       log('Adding user: $user');
@@ -32,6 +34,7 @@ class UserRepository {
     }
   }
 
+  @override
   Future<List<User>> getAllUsers() async {
     try {
       final List<Map<String, dynamic>> users = await _db.query('users');
