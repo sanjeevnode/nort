@@ -4,24 +4,28 @@ part of 'app_cubit.dart';
 class AppState extends Equatable {
  const AppState({
     this.user,
-   this.isAddingUser = false,
+   this.registerStatus = Status.none,
+    this.loginStatus = Status.none,
   });
 
   final User? user;
-  final bool isAddingUser;
+  final Status registerStatus;
+  final Status loginStatus ;
 
   AppState copyWith({
     User? user,
-    bool? isAddingUser,
+    Status? registerStatus,
+    Status? loginStatus,
   }) {
     return AppState(
       user: user ?? this.user,
-      isAddingUser: isAddingUser ?? this.isAddingUser,
+      registerStatus: registerStatus ?? this.registerStatus,
+      loginStatus: loginStatus ?? this.loginStatus,
     );
   }
 
   @override
-  List<Object?> get props => [user, isAddingUser];
+  List<Object?> get props => [user, registerStatus, loginStatus];
 
   @override
   bool get stringify => true;

@@ -1,11 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nort/core/constants/button_state.dart';
+import 'package:nort/core/constants/status.dart';
 import 'package:nort/core/theme/app_colors.dart';
 import 'package:nort/core/theme/app_text_style.dart';
+import 'package:nort/core/toast.dart';
 import 'package:nort/domain/cubit/app_cubit.dart';
 import 'package:nort/ui/widgets/custom_primary_button.dart';
 import 'package:nort/ui/widgets/custom_text_field.dart';
@@ -21,8 +21,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController();
-  final ValueNotifier<ButtonState> _buttonStateNotifier = ValueNotifier<ButtonState>(ButtonState.disable);
-
+  final ValueNotifier<ButtonState> _buttonStateNotifier =
+      ValueNotifier<ButtonState>(ButtonState.disable);
 
   @override
   void initState() {
@@ -41,7 +41,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _validateOnTextChange() {
-    if (_emailController.text.isNotEmpty && _passwordController.text.isNotEmpty && _userNameController.text.isNotEmpty) {
+    if (_emailController.text.isNotEmpty &&
+        _passwordController.text.isNotEmpty &&
+        _userNameController.text.isNotEmpty) {
       _buttonStateNotifier.value = ButtonState.enable;
     } else {
       _buttonStateNotifier.value = ButtonState.disable;
@@ -54,13 +56,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final String userName = _userNameController.text.trim();
 
     await context.read<AppCubit>().register(
-      username: userName,
-      email: email,
-      password: password,
-    );
-
+          username: userName,
+          email: email,
+          password: password,
+        );
+    _afterRegister();
   }
 
+  void _afterRegister() {
+    final state = context.read<AppCubit>().state;
+    if (state.registerStatus == Status.success) {
+      Toast.success(
+        "Registration done, please login",
+        duration: const Duration(seconds: 2),
+      );
+      Navigator.of(context).pushReplacementNamed("/login");
+    } else if (state.registerStatus == Status.error) {
+      Toast.error("Registration failed");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +89,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                 SizedBox(height: sc.height * 0.05),
+                SizedBox(height: sc.height * 0.05),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -136,26 +150,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   isPassword: true,
                 ),
                 const SizedBox(height: 24),
-                BlocBuilder<AppCubit,AppState>(
-                  builder: (context,state) {
-                    return SizedBox(
-                      width: double.infinity,
-                      child: ValueListenableBuilder<ButtonState>(
-                        valueListenable: _buttonStateNotifier,
-                        builder: (context, buttonState, child) {
-                          return CustomPrimaryButton(
-                              label: "Register",
-                              buttonState: state.isAddingUser ? ButtonState.loading : buttonState,
-                              onPressed:() {
-                                debugPrint("Register");
-                                _register();
-                              }
-                          );
-                        },
-                      ),
-                    );
-                  }
-                ),
+                BlocBuilder<AppCubit, AppState>(builder: (context, state) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: ValueListenableBuilder<ButtonState>(
+                      valueListenable: _buttonStateNotifier,
+                      builder: (context, buttonState, child) {
+                        return CustomPrimaryButton(
+                            label: "Register",
+                            buttonState: state.registerStatus == Status.loading
+                                ? ButtonState.loading
+                                : buttonState,
+                            onPressed: _register);
+                      },
+                    ),
+                  );
+                }),
                 const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -169,8 +179,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(width: 8),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed("/login");
+                        Navigator.of(context).pushReplacementNamed("/login");
                       },
                       child: Text(
                         "Login now",

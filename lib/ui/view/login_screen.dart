@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nort/core/constants/button_state.dart';
+import 'package:nort/core/constants/status.dart';
 import 'package:nort/core/theme/app_colors.dart';
 import 'package:nort/core/theme/app_text_style.dart';
+import 'package:nort/core/toast.dart';
 import 'package:nort/domain/cubit/app_cubit.dart';
 import 'package:nort/ui/widgets/custom_primary_button.dart';
 import 'package:nort/ui/widgets/custom_text_field.dart';
@@ -41,6 +43,26 @@ class _LoginScreenState extends State<LoginScreen> {
       _buttonStateNotifier.value = ButtonState.enable;
     } else {
       _buttonStateNotifier.value = ButtonState.disable;
+    }
+  }
+
+  Future<void> _login() async {
+    final String email = _emailController.text.trim();
+    final String password = _passwordController.text.trim();
+
+    await context.read<AppCubit>().login(
+      email: email,
+      password: password,
+    );
+    _afterLogin();
+  }
+
+  void _afterLogin() {
+    final state = context.read<AppCubit>().state;
+    if(state.loginStatus == Status.error) {
+      Toast.error("Invalid email or password");
+    }else if(state.loginStatus == Status.success) {
+      Navigator.of(context).pushReplacementNamed("/home");
     }
   }
 
@@ -102,12 +124,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           builder: (context, buttonState, child) {
                             return CustomPrimaryButton(
                               label: "Login",
-                              buttonState: ButtonState.enable,
-                              onPressed:() {
-                                debugPrint("Login");
-                                context.read<AppCubit>().fetchUsers();
-                                log("User: ${state.user}");
-                              }
+                              buttonState: state.loginStatus == Status.loading ? ButtonState.loading : buttonState,
+                              onPressed: _login,
                             );
                           },
                         ),
