@@ -17,17 +17,12 @@ class AppCubit extends Cubit<AppState> {
   final UserRepository _userRepository;
 
   Future<void> init() async {
-    log('1. AppCubit init');
     final (err, id) = await _userRepository.checkLoggedInUser();
-    log('2. Got user id: $id');
     if (id != null) {
       final (err, user) = await _userRepository.getUser(id: id);
-      log('3. User: $user');
-      log('3. Error: $err');
       emit(state.copyWith(user: user));
-      log('4. Emitting state user ${state.user} ');
+      log('Init User: $user');
     }
-    log('AppCubit init done with id: $id');
   }
 
   Future<void> register({
@@ -56,8 +51,9 @@ class AppCubit extends Cubit<AppState> {
     required String password,
   }) async {
     emit(state.copyWith(loginStatus: Status.loading));
-    final (err, user) = await _userRepository.getUser(email: email);
+    final (err, user) = await _userRepository.login(email: email, password: password);
     if (err != null || user == null) {
+      log('Error logging in user: $err');
       emit(state.copyWith(loginStatus: Status.error));
       return;
     }
@@ -65,4 +61,24 @@ class AppCubit extends Cubit<AppState> {
     await _userRepository.setLoggedInUser(id: user.id!);
     emit(state.copyWith(loginStatus: Status.success, user: user));
   }
+
+  Future<void> logout() async {
+    emit(state.copyWith(logoutStatus: Status.loading));
+    final (err,_)=await _userRepository.logout();
+    if (err != null) {
+      log('Error logging out user: $err');
+      emit(state.copyWith(logoutStatus: Status.error));
+      return;
+    }
+    emit(
+      state.copyWith(
+        logoutStatus: Status.success,
+      ),
+    );
+  }
+
+  void reset() {
+    emit(const AppState());
+  }
+
 }

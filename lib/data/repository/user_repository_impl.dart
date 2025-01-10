@@ -126,4 +126,33 @@ class UserRepositoryImpl implements UserRepository {
       return (e.toString(), null);
     }
   }
+
+  @override
+  Future<(String?, void)> logout()async {
+    try {
+      await _localStorage.delete(key: AppConstant.localUserId);
+      return (null, null);
+    } catch (e) {
+      log('Error logging out user: $e');
+      return (e.toString(), null);
+    }
+  }
+
+  @override
+  Future<(String?, User?)> login({required String email,required String password}) async{
+    try {
+      final (err, user) = await getUser(email: email);
+      if (err != null || user == null) {
+        return ('User not found', null);
+      }
+      final hashPass = Hash.generate(password);
+      if (user.password != hashPass) {
+        return ('Invalid password', null);
+      }
+      return (null, user);
+    } catch (e) {
+      log('Error logging in user: $e');
+      return (e.toString(), null);
+    }
+  }
 }

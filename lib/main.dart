@@ -11,8 +11,10 @@ import 'domain/cubit/app_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   FlutterNativeSplash.preserve(
-      widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
+    widgetsBinding: WidgetsFlutterBinding.ensureInitialized(),
+  );
 
   final SharedPreferences sp = await SharedPreferences.getInstance();
   final Database db = await AppDatabase().database;
@@ -27,13 +29,12 @@ Future<void> main() async {
   final appCubit = AppCubit(userRepository: userRepository);
 
   await appCubit.init();
-  debugPrint('5. about to remove splash');
+
   FlutterNativeSplash.remove();
 
   runApp(
     App(
-      userRepository: userRepository,
-      db: db,
+      appCubit: appCubit,
     ),
   );
 }
