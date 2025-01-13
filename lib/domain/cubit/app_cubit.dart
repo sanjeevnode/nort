@@ -78,6 +78,22 @@ class AppCubit extends Cubit<AppState> {
     );
   }
 
+  Future<void> setMasterPin({
+    required String pin,
+  }) async {
+    emit(state.copyWith(pinStatus: Status.loading));
+    final (err, _) = await _userRepository.setMasterPin(
+      id: state.user!.id!,
+      pin: int.parse(pin),
+    );
+    if (err != null) {
+      handleError(err);
+      emit(state.copyWith(pinStatus: Status.error));
+      return;
+    }
+    emit(state.copyWith(pinStatus: Status.success));
+  }
+
   void reset() {
     emit(const AppState());
   }

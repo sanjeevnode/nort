@@ -110,9 +110,25 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
-  Future<(AppException?, void)> setMasterPin({required int id, required int pin}) {
-    // TODO: implement setMasterPin
-    throw UnimplementedError();
+  Future<(AppException?, void)> setMasterPin({required int id, required int pin}) async {
+    try {
+     final (_, user) = await getUser(id: id);
+      if (user == null) {
+        return (UserNotFoundException(), null);
+      }
+      final hashedPin = SecureHash.generateHashWithSalt(pin.toString(), user.salt!);
+      await _db.update(
+        'users',
+        {
+          'masterPassword': hashedPin,
+        },
+        where: 'id = ?',
+        whereArgs: [id],
+      );
+      return (null, null);
+    } catch (e) {
+      return (e.toAppException(), null);
+    }
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:nort/core/theme/app_colors.dart';
 import 'package:nort/core/theme/app_text_style.dart';
 
@@ -12,10 +13,12 @@ class CustomTextField extends StatelessWidget {
     this.suffix,
     this.prefix,
     this.onChanged,
+    this.maxLength,
     this.validate = false,
     this.isPassword = false,
     this.readOnly = false,
     this.borderRadius = 15,
+    this.keyboardType = TextInputType.text,
     this.padding = const EdgeInsets.symmetric(
       horizontal: 16,
       vertical: 12,
@@ -44,6 +47,10 @@ class CustomTextField extends StatelessWidget {
   final bool readOnly;
 
   final void Function(String)? onChanged;
+
+  final TextInputType keyboardType;
+
+  final int? maxLength;
 
   OutlineInputBorder get _border => OutlineInputBorder(
         borderRadius: BorderRadius.circular(borderRadius),
@@ -85,11 +92,20 @@ class CustomTextField extends StatelessWidget {
         suffix: suffix,
         prefix: prefix,
       ),
+      maxLength: maxLength,
+      maxLengthEnforcement: MaxLengthEnforcement.enforced,
+      buildCounter: (
+        BuildContext context, {
+        required int currentLength,
+        required int? maxLength,
+        required bool isFocused,
+      }) => null,
+      keyboardType: keyboardType,
       obscureText: isPassword,
       obscuringCharacter: "*",
       readOnly: readOnly,
       validator: (value) {
-        if ((value == null || value.isEmpty)&& validate) {
+        if ((value == null || value.isEmpty) && validate) {
           return errorText ?? '${labelText ?? "This field "} is required.';
         }
         return null;

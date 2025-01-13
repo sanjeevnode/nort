@@ -6,6 +6,7 @@ import 'package:nort/core/theme/app_colors.dart';
 import 'package:nort/core/theme/app_text_style.dart';
 import 'package:nort/core/toast.dart';
 import 'package:nort/domain/cubit/app_cubit.dart';
+import 'package:nort/ui/routes/app_route_name.dart';
 import 'package:nort/ui/widgets/custom_primary_button.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,7 +26,7 @@ class _HomePageState extends State<HomePage> {
     final state = context.read<AppCubit>().state;
     if (state.logoutStatus == Status.success) {
       context.read<AppCubit>().reset();
-      Navigator.of(context).pushReplacementNamed('/login');
+      Navigator.of(context).pushReplacementNamed(AppRouteNames.login);
     }
   }
 

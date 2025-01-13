@@ -20,6 +20,11 @@ class SecureHash {
     };
   }
 
+  static String generateHashWithSalt(String text, String salt) {
+    final hash = sha256.convert(utf8.encode(salt + text)).toString();
+    return hash;
+  }
+
   // Compare text with hash using the stored salt
   static bool compare(String text, String salt, String hash) {
     final newHash = sha256.convert(utf8.encode(salt + text)).toString();
