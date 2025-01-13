@@ -1,7 +1,8 @@
 import 'dart:developer';
 
+import 'package:nort/core/app_error.dart';
 import 'package:nort/core/constants/app_constant.dart';
-import 'package:nort/core/utils/hash.dart';
+import 'package:nort/core/utils/secure_hash.dart';
 import 'package:nort/data/local/persistent_storage.dart';
 import 'package:nort/data/model/user_model.dart';
 import 'package:nort/domain/repository/user_repository.dart';
@@ -18,30 +19,30 @@ class UserRepositoryImpl implements UserRepository {
   final PersistentStorage _localStorage;
 
   @override
-  Future<(String?, int?)> addUser({required User user}) async {
+  Future<(AppException?, int?)> addUser({required User user}) async {
     try {
       final (_,existingUser) = await getUser(email: user.email);
       if (existingUser != null) {
-        return ('User already exists', null);
+        return (UserAlreadyExistsException(), null);
       }
-      final hashPass = Hash.generate(user.password);
+      final sh = SecureHash.generate(user.password);
       final id = await _db.insert(
         'users',
         {
           'username': user.username,
           'email': user.email,
-          'password': hashPass,
+          'password': sh["hash"],
+          'salt': sh["salt"],
         },
       );
       return (null, id);
     } catch (e) {
-      log('Error adding user: $e');
-      return (e.toString(), null);
+      return (e.toAppException(), null);
     }
   }
 
   @override
-  Future<(String?, List<User>?)> getAllUsers() async {
+  Future<(AppException?, List<User>?)> getAllUsers() async {
     try {
       final List<Map<String, dynamic>> users = await _db.query('users');
       final u = users
@@ -49,31 +50,29 @@ class UserRepositoryImpl implements UserRepository {
           .toList();
       return (null, u);
     } catch (e) {
-      log('Error fetching users: $e');
-      return (e.toString(), null);
+      return (e.toAppException(), null);
     }
   }
 
   @override
-  Future<(String?, int?)> checkLoggedInUser() async {
+  Future<(AppException?, int?)> checkLoggedInUser() async {
     try {
       final id = await _localStorage.read(key: AppConstant.localUserId);
       if (id == null) {
-        return ('User Not Logged In', null);
+        return (UserNotLoggedInException(), null);
       }
       return (null, int.tryParse(id.toString()));
     } catch (e) {
-      log('Error checking logged in users : $e');
-      return (e.toString(), null);
+      return (e.toAppException(), null);
     }
   }
 
   @override
-  Future<(String?, User?)> getUser(
+  Future<(AppException?, User?)> getUser(
       {int? id, String? email, String? username}) async {
     try {
       if (id == null && email == null && username == null) {
-        return ('No criteria provided', null);
+        return (BadRequestException(message: 'Not Sufficient Data'), null);
       }
 
       final whereClauses = <String>[];
@@ -99,60 +98,57 @@ class UserRepositoryImpl implements UserRepository {
       );
 
       if (users.isEmpty) {
-        return ('User not found', null);
+        return (UserNotFoundException(), null);
       }
 
       final user = User.fromJson(users.first);
       return (null, user);
     } catch (e) {
       log('Error fetching user: $e');
-      return (e.toString(), null);
+      return (e.toAppException(), null);
     }
   }
 
   @override
-  Future<(String?, void)> setMasterPin({required int id, required int pin}) {
+  Future<(AppException?, void)> setMasterPin({required int id, required int pin}) {
     // TODO: implement setMasterPin
     throw UnimplementedError();
   }
 
   @override
-  Future<(String?, void)> setLoggedInUser({required int id}) async{
+  Future<(AppException?, void)> setLoggedInUser({required int id}) async{
     try {
       await _localStorage.write(key: AppConstant.localUserId, value: id.toString());
       return (null, null);
     } catch (e) {
-      log('Error setting logged in user: $e');
-      return (e.toString(), null);
+      return (e.toAppException(), null);
     }
   }
 
   @override
-  Future<(String?, void)> logout()async {
+  Future<(AppException?, void)> logout()async {
     try {
       await _localStorage.delete(key: AppConstant.localUserId);
       return (null, null);
     } catch (e) {
-      log('Error logging out user: $e');
-      return (e.toString(), null);
+      return (e.toAppException(), null);
     }
   }
 
   @override
-  Future<(String?, User?)> login({required String email,required String password}) async{
+  Future<(AppException?, User?)> login({required String email,required String password}) async{
     try {
       final (err, user) = await getUser(email: email);
       if (err != null || user == null) {
-        return ('User not found', null);
+        return (err, null);
       }
-      final hashPass = Hash.generate(password);
-      if (user.password != hashPass) {
-        return ('Invalid password', null);
+      final isUser = SecureHash.compare(password, user.salt!, user.password);
+      if (!isUser) {
+        return (InvalidCredentialsException(), null);
       }
       return (null, user);
     } catch (e) {
-      log('Error logging in user: $e');
-      return (e.toString(), null);
+      return (e.toAppException(), null);
     }
   }
 }

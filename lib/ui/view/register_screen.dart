@@ -71,8 +71,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         duration: const Duration(seconds: 2),
       );
       Navigator.of(context).pushReplacementNamed("/login");
-    } else if (state.registerStatus == Status.error) {
-      Toast.error("Registration failed");
     }
   }
 

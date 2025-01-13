@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:nort/core/app_error.dart';
 import 'package:nort/core/constants/status.dart';
+import 'package:nort/core/toast.dart';
 import 'package:nort/data/model/user_model.dart';
 import 'package:nort/domain/repository/user_repository.dart';
 
@@ -38,12 +40,11 @@ class AppCubit extends Cubit<AppState> {
     );
     final (err, id) = await _userRepository.addUser(user: user);
     if (err != null) {
-      log('Error registering user: $err');
+      handleError(err);
       emit(state.copyWith(registerStatus: Status.error));
       return;
     }
     emit(state.copyWith(registerStatus: Status.success));
-    log('Registered User: $id');
   }
 
   Future<void> login({
@@ -51,22 +52,22 @@ class AppCubit extends Cubit<AppState> {
     required String password,
   }) async {
     emit(state.copyWith(loginStatus: Status.loading));
-    final (err, user) = await _userRepository.login(email: email, password: password);
+    final (err, user) =
+        await _userRepository.login(email: email, password: password);
     if (err != null || user == null) {
-      log('Error logging in user: $err');
+      handleError(err);
       emit(state.copyWith(loginStatus: Status.error));
       return;
     }
-    log('Logged User: $user');
     await _userRepository.setLoggedInUser(id: user.id!);
     emit(state.copyWith(loginStatus: Status.success, user: user));
   }
 
   Future<void> logout() async {
     emit(state.copyWith(logoutStatus: Status.loading));
-    final (err,_)=await _userRepository.logout();
+    final (err, _) = await _userRepository.logout();
     if (err != null) {
-      log('Error logging out user: $err');
+      handleError(err);
       emit(state.copyWith(logoutStatus: Status.error));
       return;
     }
@@ -81,4 +82,15 @@ class AppCubit extends Cubit<AppState> {
     emit(const AppState());
   }
 
+  void handleError(AppException? e) {
+    if (e is UserNotFoundException) {
+      Toast.error(e.message);
+    } else if (e is UserAlreadyExistsException) {
+      Toast.error(e.message);
+    } else if (e is InvalidCredentialsException) {
+      Toast.error(e.message);
+    } else {
+      Toast.error('An error occurred');
+    }
+  }
 }

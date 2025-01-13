@@ -26,8 +26,6 @@ class _HomePageState extends State<HomePage> {
     if (state.logoutStatus == Status.success) {
       context.read<AppCubit>().reset();
       Navigator.of(context).pushReplacementNamed('/login');
-    } else {
-      Toast.error('Error logging out');
     }
   }
 

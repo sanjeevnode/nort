@@ -33,7 +33,8 @@ class AppDatabase {
             username TEXT NOT NULL UNIQUE,
             email TEXT NOT NULL UNIQUE,
             password TEXT NOT NULL,
-            masterPassword TEXT,   
+            masterPassword TEXT, 
+            salt TEXT NOT NULL,  
             isVerified INTEGER NOT NULL DEFAULT 0,
             createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
             updatedAt TEXT DEFAULT CURRENT_TIMESTAMP

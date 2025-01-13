@@ -7,6 +7,7 @@ class User {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final bool? isVerified;
+  final String? salt;
 
   User({
     this.id,
@@ -17,6 +18,7 @@ class User {
     this.createdAt,
     this.updatedAt,
     this.isVerified,
+    this.salt,
   });
 
   User copyWith({
@@ -25,6 +27,7 @@ class User {
     String? email,
     String? password,
     String? masterPassword,
+    String? salt,
     DateTime? createdAt,
     DateTime? updatedAt,
     bool? isVerified,
@@ -38,6 +41,7 @@ class User {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       isVerified: isVerified ?? this.isVerified,
+      salt: salt ?? this.salt,
     );
   }
 
@@ -51,6 +55,7 @@ class User {
       createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
       updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
       isVerified: json['isVerified'] == 1,
+      salt: json['salt'],
     );
   }
 
@@ -61,6 +66,7 @@ class User {
       'email': email,
       'password': password,
       'masterPassword': masterPassword,
+      'salt': salt,
       'createdAt': createdAt?.toIso8601String(),
       'updatedAt': updatedAt?.toIso8601String(),
       'isVerified': isVerified == true ? 1 : 0,

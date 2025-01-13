@@ -59,9 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _afterLogin() {
     final state = context.read<AppCubit>().state;
-    if(state.loginStatus == Status.error) {
-      Toast.error("Invalid email or password");
-    }else if(state.loginStatus == Status.success) {
+    if(state.loginStatus == Status.success) {
       Navigator.of(context).pushReplacementNamed("/home");
     }
   }
