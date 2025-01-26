@@ -7,6 +7,7 @@ class AppState extends Equatable {
     this.loginStatus = Status.none,
     this.logoutStatus = Status.none,
     this.pinStatus = Status.none,
+    this.navIndex = 0,
   });
 
   final User? user;
@@ -15,12 +16,15 @@ class AppState extends Equatable {
   final Status logoutStatus;
   final Status pinStatus;
 
+  final int navIndex;
+
   AppState copyWith({
     User? user,
     Status? registerStatus,
     Status? loginStatus,
     Status? logoutStatus,
     Status? pinStatus,
+    int? navIndex,
   }) {
     return AppState(
       user: user ?? this.user,
@@ -28,11 +32,12 @@ class AppState extends Equatable {
       loginStatus: loginStatus ?? this.loginStatus,
       logoutStatus: logoutStatus ?? this.logoutStatus,
       pinStatus: pinStatus ?? this.pinStatus,
+      navIndex: navIndex ?? this.navIndex,
     );
   }
 
   @override
-  List<Object?> get props => [user, registerStatus, loginStatus, logoutStatus, pinStatus];
+  List<Object?> get props => [user, registerStatus, loginStatus, logoutStatus, pinStatus,navIndex];
 
   @override
   bool get stringify => true;

@@ -1,16 +1,13 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nort/core/constants/button_state.dart';
 import 'package:nort/core/constants/status.dart';
 import 'package:nort/core/theme/app_colors.dart';
 import 'package:nort/core/theme/app_text_style.dart';
-import 'package:nort/core/toast.dart';
 import 'package:nort/domain/cubit/app_cubit.dart';
 import 'package:nort/ui/routes/app_route_name.dart';
-import 'package:nort/ui/widgets/custom_primary_button.dart';
-import 'package:nort/ui/widgets/custom_text_field.dart';
+import 'package:nort/ui/widgets/app_button.dart';
+import 'package:nort/ui/widgets/app_text_field.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -125,7 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: ValueListenableBuilder<ButtonState>(
                           valueListenable: _buttonStateNotifier,
                           builder: (context, buttonState, child) {
-                            return CustomPrimaryButton(
+                            return PrimaryButton(
                               label: "Login",
                               buttonState: state.loginStatus == Status.loading ? ButtonState.loading : buttonState,
                               onPressed: _login,
@@ -149,10 +146,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       GestureDetector(
                         onTap: () {
                           Navigator.of(context)
-                              .pushReplacementNamed("/register");
+                              .pushReplacementNamed(AppRouteNames.register);
                         },
                         child: Text(
-                          "Register now",
+                          "Register",
                           style: AppTextStyle.textMdMedium.copyWith(
                             color: AppColors.primary,
                           ),

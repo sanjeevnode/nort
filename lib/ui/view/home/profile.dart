@@ -2,21 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nort/core/constants/button_state.dart';
 import 'package:nort/core/constants/status.dart';
-import 'package:nort/core/theme/app_colors.dart';
-import 'package:nort/core/theme/app_text_style.dart';
-import 'package:nort/core/toast.dart';
 import 'package:nort/domain/cubit/app_cubit.dart';
 import 'package:nort/ui/routes/app_route_name.dart';
-import 'package:nort/ui/widgets/custom_primary_button.dart';
+import 'package:nort/ui/widgets/app_button.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class Profile extends StatefulWidget {
+  const Profile({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<Profile> createState() => _ProfileState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ProfileState extends State<Profile> {
   Future<void> _logout() async {
     await context.read<AppCubit>().logout();
     _afterLogout();
@@ -33,24 +30,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final sc = MediaQuery.of(context).size;
-    return Scaffold(
-      backgroundColor: AppColors.light100,
-      body: BlocBuilder<AppCubit, AppState>(builder: (context, state) {
-        return Container(
-          width: sc.width,
-          height: sc.height,
-          padding: const EdgeInsets.all(20.0),
+    return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                'User: ${state.user?.username}',
-                style: AppTextStyle.displayH1,
-              ),
-              const SizedBox(height: 20.0),
               SizedBox(
                 width: sc.width,
-                child: CustomPrimaryButton(
+                child: PrimaryButton(
                   label: 'Logout',
                   buttonState: state.logoutStatus == Status.loading
                       ? ButtonState.loading
@@ -60,8 +48,8 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-        );
-      }),
-    );
+        ),
+      );
+    });
   }
 }

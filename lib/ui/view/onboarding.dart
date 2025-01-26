@@ -8,8 +8,8 @@ import 'package:nort/core/theme/app_text_style.dart';
 import 'package:nort/core/toast.dart';
 import 'package:nort/domain/cubit/app_cubit.dart';
 import 'package:nort/ui/routes/app_route_name.dart';
-import 'package:nort/ui/widgets/custom_primary_button.dart';
-import 'package:nort/ui/widgets/custom_text_field.dart';
+import 'package:nort/ui/widgets/app_button.dart';
+import 'package:nort/ui/widgets/app_text_field.dart';
 import 'package:nort/ui/widgets/scroll_wrapper.dart';
 
 class Onboarding extends StatefulWidget {
@@ -147,7 +147,7 @@ class _OnboardingState extends State<Onboarding> {
                 child: ValueListenableBuilder<ButtonState>(
                   valueListenable: _buttonStateNotifier,
                   builder: (context, buttonState, child) {
-                    return CustomPrimaryButton(
+                    return PrimaryButton(
                       label: "Save",
                       buttonState: state.pinStatus == Status.loading
                           ? ButtonState.loading

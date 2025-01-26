@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nort/core/toast.dart';
 import 'package:nort/domain/cubit/app_cubit.dart';
-import 'package:nort/ui/view/home.dart';
+import 'package:nort/ui/view/home/home.dart';
 import 'package:nort/ui/view/onboarding.dart';
 
 import 'core/theme/app_theme.dart';

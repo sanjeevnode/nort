@@ -8,8 +8,8 @@ import 'package:nort/core/theme/app_text_style.dart';
 import 'package:nort/core/toast.dart';
 import 'package:nort/domain/cubit/app_cubit.dart';
 import 'package:nort/ui/routes/app_route_name.dart';
-import 'package:nort/ui/widgets/custom_primary_button.dart';
-import 'package:nort/ui/widgets/custom_text_field.dart';
+import 'package:nort/ui/widgets/app_button.dart';
+import 'package:nort/ui/widgets/app_text_field.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -155,7 +155,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: ValueListenableBuilder<ButtonState>(
                       valueListenable: _buttonStateNotifier,
                       builder: (context, buttonState, child) {
-                        return CustomPrimaryButton(
+                        return PrimaryButton(
                             label: "Register",
                             buttonState: state.registerStatus == Status.loading
                                 ? ButtonState.loading
@@ -178,10 +178,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(width: 8),
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pushReplacementNamed("/login");
+                        Navigator.of(context).pushReplacementNamed(AppRouteNames.login);
                       },
                       child: Text(
-                        "Login now",
+                        "Login",
                         style: AppTextStyle.textMdMedium.copyWith(
                           color: AppColors.primary,
                         ),

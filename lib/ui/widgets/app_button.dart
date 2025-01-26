@@ -3,8 +3,8 @@ import 'package:nort/core/constants/button_state.dart';
 import 'package:nort/core/theme/app_colors.dart';
 import 'package:nort/core/theme/app_text_style.dart';
 
-class CustomPrimaryButton extends StatelessWidget {
-  const CustomPrimaryButton({
+class PrimaryButton extends StatelessWidget {
+  const PrimaryButton({
     super.key,
     required this.onPressed,
     this.label = 'Submit',
@@ -13,6 +13,7 @@ class CustomPrimaryButton extends StatelessWidget {
     this.textStyle,
     this.borderRadius = 15,
     this.elevation = 0,
+    this.style,
     this.buttonState = ButtonState.enable,
     this.padding = const EdgeInsets.symmetric(
       horizontal: 24,
@@ -38,12 +39,14 @@ class CustomPrimaryButton extends StatelessWidget {
 
   final void Function() onPressed;
 
+  final ButtonStyle? style;
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: (buttonState == ButtonState.enable) ? onPressed : null,
       clipBehavior: Clip.hardEdge,
-      style: ElevatedButton.styleFrom(
+      style: style ??  ElevatedButton.styleFrom(
         elevation: elevation,
         padding: padding,
         backgroundColor: AppColors.primary,
@@ -100,4 +103,35 @@ class CustomPrimaryButton extends StatelessWidget {
       ],
     );
   }
+}
+
+
+class OutlineButton extends PrimaryButton {
+   OutlineButton({
+    super.key,
+    required super.onPressed,
+    super.label = 'Submit',
+    super.child,
+    super.icon,
+    super.borderRadius = 15,
+    super.elevation = 0,
+    super.padding = const EdgeInsets.symmetric(
+      horizontal: 24,
+      vertical: 12,
+    ),
+    super.buttonState = ButtonState.enable,
+  }) : super(
+    style: ElevatedButton.styleFrom(
+      side: const BorderSide(color: AppColors.primary700, width: 1),
+      backgroundColor: AppColors.light100,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(borderRadius),
+      ),
+      padding: padding,
+      elevation: elevation,
+    ),
+     textStyle: AppTextStyle.textLgMedium.copyWith(
+      color: AppColors.primary700,
+    ),
+  );
 }

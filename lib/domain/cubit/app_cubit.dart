@@ -109,4 +109,13 @@ class AppCubit extends Cubit<AppState> {
       Toast.error('An error occurred');
     }
   }
+
+  /// Navigation
+  void setNavIndex(int index) {
+    if (index >= 0 && index <= 3) {
+      emit(state.copyWith(navIndex: index));
+    } else {
+      emit(state.copyWith(navIndex: 0));
+    }
+  }
 }
