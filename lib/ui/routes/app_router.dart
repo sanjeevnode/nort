@@ -3,6 +3,7 @@ import 'package:nort/ui/view/home/home.dart';
 import 'package:nort/ui/view/login_screen.dart';
 import 'package:nort/ui/view/onboarding.dart';
 import 'package:nort/ui/view/register_screen.dart';
+import 'package:nort/ui/widgets/enter_master_password.dart';
 
 import 'app_route_name.dart';
 
@@ -29,6 +30,11 @@ class AppRouter {
         return _buildMaterialPageRoute(
           const RegisterScreen(),
           name: AppRouteNames.register,
+        );
+      case AppRouteNames.enterPassword:
+        return _buildMaterialPageRoute(
+          const EnterMasterPassword(),
+          name: AppRouteNames.enterPassword,
         );
       default:
         return _buildMaterialPageRoute(const Scaffold());

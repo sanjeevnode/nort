@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nort/core/theme/app_colors.dart';
 import 'package:nort/core/theme/app_text_style.dart';
 import 'package:nort/domain/cubit/app_cubit.dart';
+import 'package:nort/ui/routes/app_route_name.dart';
+import 'package:nort/ui/widgets/app_bottom_sheet.dart';
+import 'package:nort/ui/widgets/enter_master_password.dart';
 import 'package:nort/ui/widgets/note_item.dart';
 
 class NoteListPage extends StatefulWidget {
@@ -13,6 +16,10 @@ class NoteListPage extends StatefulWidget {
 }
 
 class _NoteListPageState extends State<NoteListPage> {
+  Future<void> _showBottomSheet() async {
+    await Navigator.pushNamed(context, AppRouteNames.enterPassword);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -20,6 +27,7 @@ class _NoteListPageState extends State<NoteListPage> {
         NoteItem(
           title: 'Gmail',
           lastUpdated: '2025-01-15 12:00:00',
+          onTap: _showBottomSheet,
         ),
         NoteItem(
           title: 'Facebook',
