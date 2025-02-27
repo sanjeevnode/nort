@@ -13,7 +13,21 @@ class EnterMasterPassword extends StatefulWidget {
 }
 
 class _EnterMasterPasswordState extends State<EnterMasterPassword> {
-  List<String> _password = [];
+  final List<String> _password = [];
+  bool _error = false;
+
+  void _handleSae() {
+    if (_password.length != 6) {
+      setState(() {
+        _error = true;
+      });
+      return;
+    }
+    log('password: $_password');
+    Navigator.of(context).pop(
+      _password.join(''),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,10 +106,12 @@ class _EnterMasterPasswordState extends State<EnterMasterPassword> {
                           height: itemSize,
                           decoration: flag
                               ? null
-                              : const BoxDecoration(
+                              : BoxDecoration(
                                   border: Border(
                                     bottom: BorderSide(
-                                      color: AppColors.dark100,
+                                      color: _error
+                                          ? AppColors.error900
+                                          : AppColors.dark100,
                                       width: 2,
                                     ),
                                   ),
@@ -173,7 +189,7 @@ class _EnterMasterPasswordState extends State<EnterMasterPassword> {
                     ),
                     Material(
                       child: InkWell(
-                        onTap: () {},
+                        onTap: _handleSae,
                         child: SizedBox(
                           width: w,
                           height: h,

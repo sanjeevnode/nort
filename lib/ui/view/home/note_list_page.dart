@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nort/core/theme/app_colors.dart';
@@ -15,23 +17,27 @@ class NoteListPage extends StatefulWidget {
 
 class _NoteListPageState extends State<NoteListPage> {
   Future<void> _showBottomSheet() async {
-    await Navigator.pushNamed(context, AppRouteNames.enterPassword);
+    final pass =
+        await Navigator.pushNamed(context, AppRouteNames.enterPassword);
+    log('password: get $pass');
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        NoteItem(
-          title: 'Gmail',
-          lastUpdated: '2025-01-15 12:00:00',
-          onTap: _showBottomSheet,
-        ),
-        const NoteItem(
-          title: 'Facebook',
-          lastUpdated: '2025-01-15 12:00:00',
-        ),
-      ],
+    return Scaffold(
+      body: ListView(
+        children: [
+          NoteItem(
+            title: 'Gmail',
+            lastUpdated: '2025-01-15 12:00:00',
+            onTap: _showBottomSheet,
+          ),
+          const NoteItem(
+            title: 'Facebook',
+            lastUpdated: '2025-01-15 12:00:00',
+          ),
+        ],
+      ),
     );
   }
 
