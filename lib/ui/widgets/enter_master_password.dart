@@ -238,7 +238,7 @@ class NumberContainer extends StatelessWidget {
           child: Center(
             child: Text(
               text,
-              style: AppTextStyle.textLgMedium.copyWith(
+              style: AppTextStyle.text2xlRegular.copyWith(
                 color: const Color.fromARGB(255, 0, 63, 146),
               ),
             ),

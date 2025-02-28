@@ -4,10 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:nort/core/theme/app_colors.dart';
 import 'package:nort/core/theme/app_text_style.dart';
 import 'package:nort/domain/cubit/app_cubit.dart';
-import 'package:nort/ui/view/home/add_notes.dart';
-import 'package:nort/ui/view/home/note_list_page.dart';
-import 'package:nort/ui/view/home/profile.dart';
-import 'package:nort/ui/view/home/settings.dart';
+import 'package:nort/ui/enums/navtype.dart';
 import 'package:nort/ui/widgets/navbar.dart';
 
 class HomePage extends StatefulWidget {
@@ -25,60 +22,9 @@ class _HomePageState extends State<HomePage> {
         return Scaffold(
           backgroundColor: AppColors.light100,
           bottomNavigationBar: const Navbar(),
-          appBar: AppBar(
-            title: Row(
-              children: [
-                SvgPicture.asset(
-                  'assets/icons/logo.svg',
-                  width: 20,
-                  height: 20,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  _getTitle(state.navIndex),
-                  style: AppTextStyle.textLgMedium,
-                ),
-              ],
-            ),
-            backgroundColor: AppColors.light100,
-            elevation: 0,
-            scrolledUnderElevation: 0,
-          ),
-          body: _getScreen(state.navIndex),
+          body: state.navType.screen,
         );
       },
     );
-  }
-
-  Widget _getScreen(int index) {
-    switch (index) {
-      case 0:
-        return const NoteListPage();
-      case 1:
-        return const AddNotes();
-      case 2:
-        return const Settings();
-      case 3:
-        return const Profile();
-      default:
-        return const NoteListPage();
-    }
-  }
-
-  String _getTitle(int index) {
-    switch (index) {
-      case 0:
-        return 'My Notes';
-      case 1:
-        return 'Add Notes';
-      case 2:
-        return 'Settings';
-      case 3:
-        return 'Profile';
-      default:
-        return 'Home';
-    }
   }
 }

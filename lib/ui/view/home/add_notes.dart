@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:nort/core/theme/app_colors.dart';
 import 'package:nort/core/theme/app_text_style.dart';
-import 'package:nort/ui/widgets/app_button.dart';
 
 class AddNotes extends StatefulWidget {
   const AddNotes({super.key});
@@ -17,6 +15,7 @@ class _AddNotesState extends State<AddNotes> {
 
   @override
   Widget build(BuildContext context) {
+    final sc = MediaQuery.of(context).size;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -24,6 +23,7 @@ class _AddNotesState extends State<AddNotes> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SizedBox(height: sc.height * 0.03),
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,
@@ -51,7 +51,7 @@ class _AddNotesState extends State<AddNotes> {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          SizedBox(height: sc.height * 0.03),
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20,

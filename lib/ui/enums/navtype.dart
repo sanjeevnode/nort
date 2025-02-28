@@ -1,39 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:nort/ui/view/home/add_notes.dart';
+import 'package:nort/ui/view/home/note_list_page.dart';
 import 'package:nort/ui/view/home/profile.dart';
 import 'package:nort/ui/view/home/settings.dart';
-import 'package:nort/ui/widgets/note_list_page.dart';
 
-enum Navtype {
+enum NavType {
   home,
   addNotes,
   settings,
   profile,
 }
 
-extension NavtypeExtension on Navtype {
+extension NavTypeExtension on NavType {
   String get title {
     switch (this) {
-      case Navtype.home:
+      case NavType.home:
         return 'Home';
-      case Navtype.addNotes:
+      case NavType.addNotes:
         return 'Add Notes';
-      case Navtype.settings:
+      case NavType.settings:
         return 'Settings';
-      case Navtype.profile:
+      case NavType.profile:
         return 'Profile';
     }
   }
 
   Widget get screen {
     switch (this) {
-      case Navtype.home:
+      case NavType.home:
         return const NoteListPage();
-      case Navtype.addNotes:
+      case NavType.addNotes:
         return const AddNotes();
-      case Navtype.settings:
+      case NavType.settings:
         return const Settings();
-      case Navtype.profile:
+      case NavType.profile:
         return const Profile();
     }
   }

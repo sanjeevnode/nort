@@ -8,6 +8,7 @@ import 'package:nort/core/constants/status.dart';
 import 'package:nort/core/toast.dart';
 import 'package:nort/data/model/user_model.dart';
 import 'package:nort/domain/repository/user_repository.dart';
+import 'package:nort/ui/enums/navtype.dart';
 
 part 'app_state.dart';
 
@@ -112,11 +113,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   /// Navigation
-  void setNavIndex(int index) {
-    if (index >= 0 && index <= 3) {
-      emit(state.copyWith(navIndex: index));
-    } else {
-      emit(state.copyWith(navIndex: 0));
-    }
+  void setNav(NavType navType) {
+    emit(state.copyWith(navType: navType));
   }
 }

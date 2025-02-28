@@ -7,7 +7,7 @@ class AppState extends Equatable {
     this.loginStatus = Status.none,
     this.logoutStatus = Status.none,
     this.pinStatus = Status.none,
-    this.navIndex = 0,
+    this.navType = NavType.home,
     this.navAction,
   });
 
@@ -17,7 +17,7 @@ class AppState extends Equatable {
   final Status logoutStatus;
   final Status pinStatus;
 
-  final int navIndex;
+  final NavType navType;
   final Widget? navAction;
 
   AppState copyWith({
@@ -26,7 +26,7 @@ class AppState extends Equatable {
     Status? loginStatus,
     Status? logoutStatus,
     Status? pinStatus,
-    int? navIndex,
+    NavType? navType,
     Widget? navAction,
   }) {
     return AppState(
@@ -35,7 +35,7 @@ class AppState extends Equatable {
       loginStatus: loginStatus ?? this.loginStatus,
       logoutStatus: logoutStatus ?? this.logoutStatus,
       pinStatus: pinStatus ?? this.pinStatus,
-      navIndex: navIndex ?? this.navIndex,
+      navType: navType ?? this.navType,
       navAction: navAction ?? this.navAction,
     );
   }
@@ -47,7 +47,7 @@ class AppState extends Equatable {
         loginStatus,
         logoutStatus,
         pinStatus,
-        navIndex,
+        navType,
         navAction
       ];
 

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nort/core/theme/app_colors.dart';
 import 'package:nort/core/theme/app_text_style.dart';
 import 'package:nort/domain/cubit/app_cubit.dart';
+import 'package:nort/ui/enums/navtype.dart';
 import 'package:nort/ui/routes/app_route_name.dart';
 import 'package:nort/ui/widgets/note_item.dart';
 
@@ -52,7 +53,7 @@ class _NoteListPageState extends State<NoteListPage> {
             children: [
               InkWell(
                 onTap: () {
-                  context.read<AppCubit>().setNavIndex(1);
+                  context.read<AppCubit>().setNav(NavType.addNotes);
                 },
                 child: Image.asset(
                   'assets/images/empty.png',
