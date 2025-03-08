@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nort/core/theme/app_colors.dart';
 import 'package:nort/core/theme/app_text_style.dart';
+import 'package:nort/ui/widgets/custom_app_bar.dart';
 
 class EnterMasterPassword extends StatefulWidget {
   const EnterMasterPassword({super.key});
@@ -34,42 +35,14 @@ class _EnterMasterPasswordState extends State<EnterMasterPassword> {
     final sc = MediaQuery.of(context).size;
     log('password: $_password');
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60),
-        child: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Icon(
-                    Icons.arrow_back_ios,
-                    color: AppColors.dark900,
-                    size: 16,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                SvgPicture.asset(
-                  'assets/icons/logo.svg',
-                  width: 20,
-                  height: 20,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  'Nort',
-                  maxLines: 1,
-                  style: AppTextStyle.textLgMedium.copyWith(
-                    color: AppColors.dark900,
-                  ),
-                ),
-              ],
-            ),
-          ),
+      appBar: CustomAppBar(
+        title: 'Nort',
+        prefix: SvgPicture.asset(
+          'assets/icons/logo.svg',
+          width: 24,
+          height: 24,
         ),
+        enableBack: true,
       ),
       body: Container(
         height: sc.height,

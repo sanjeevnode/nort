@@ -2,11 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:nort/core/theme/app_colors.dart';
 import 'package:nort/core/theme/app_text_style.dart';
 import 'package:nort/domain/cubit/app_cubit.dart';
 import 'package:nort/ui/enums/navtype.dart';
 import 'package:nort/ui/routes/app_route_name.dart';
+import 'package:nort/ui/widgets/custom_app_bar.dart';
 import 'package:nort/ui/widgets/note_item.dart';
 
 class NoteListPage extends StatefulWidget {
@@ -26,6 +28,19 @@ class _NoteListPageState extends State<NoteListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.light100,
+      appBar: CustomAppBar(
+        title: 'My Notes',
+        prefix: SvgPicture.asset(
+          'assets/icons/mynote.svg',
+          width: 24,
+          height: 24,
+          colorFilter: const ColorFilter.mode(
+            AppColors.dark900,
+            BlendMode.srcIn,
+          ),
+        ),
+      ),
       body: ListView(
         children: [
           NoteItem(

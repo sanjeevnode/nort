@@ -21,9 +21,9 @@ class AppCubit extends Cubit<AppState> {
   final UserRepository _userRepository;
 
   Future<void> init() async {
-    final (err, id) = await _userRepository.checkLoggedInUser();
+    final (_, id) = await _userRepository.checkLoggedInUser();
     if (id != null) {
-      final (err, user) = await _userRepository.getUser(id: id);
+      final (_, user) = await _userRepository.getUser(id: id);
       emit(state.copyWith(user: user));
       log('Init User: $user');
     }
@@ -40,7 +40,7 @@ class AppCubit extends Cubit<AppState> {
       email: email,
       password: password,
     );
-    final (err, id) = await _userRepository.addUser(user: user);
+    final (err, _) = await _userRepository.addUser(user: user);
     if (err != null) {
       handleError(err);
       emit(state.copyWith(registerStatus: Status.error));
