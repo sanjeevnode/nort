@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nort/core/core.dart';
@@ -23,7 +21,6 @@ class _EnterMasterPasswordState extends State<EnterMasterPassword> {
       });
       return;
     }
-    log('password: $_password');
     Navigator.of(context).pop(
       _password.join(''),
     );
@@ -32,7 +29,6 @@ class _EnterMasterPasswordState extends State<EnterMasterPassword> {
   @override
   Widget build(BuildContext context) {
     final sc = MediaQuery.of(context).size;
-    log('password: $_password');
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Nort',

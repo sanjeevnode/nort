@@ -22,7 +22,7 @@ class _AddNotesState extends State<AddNotes> {
   final _scrollController = ScrollController();
 
   Future<void> _handleSave() async {
-    FocusScope.of(context).unfocus();
+    _unfocus();
     if (_titleController.text.isEmpty || _contentController.text.isEmpty) {
       return;
     }
@@ -30,6 +30,7 @@ class _AddNotesState extends State<AddNotes> {
     if (pin == null) {
       return;
     }
+    _unfocus();
     final title = _titleController.text.trim();
     final content = _contentController.text.trim();
     final id = await context.read<AppCubit>().addNote(
@@ -43,6 +44,12 @@ class _AddNotesState extends State<AddNotes> {
       _titleController.clear();
       context.read<AppCubit>().setNav(NavType.home);
     }
+  }
+
+  void _unfocus() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      FocusScope.of(context).unfocus();
+    });
   }
 
   @override

@@ -41,6 +41,15 @@ class Note {
     };
   }
 
+  Map<String, dynamic> toDBMap() {
+    return {
+      'userId': userId,
+      'title': title,
+      'content': content,
+      'salt': salt,
+    };
+  }
+
   Note copyWith({
     int? id,
     int? userId,

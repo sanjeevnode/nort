@@ -1,4 +1,3 @@
-import 'package:nort/core/app_error.dart';
 import 'package:nort/domain/domain.dart';
 import 'package:nort/core/core.dart';
 import 'package:nort/data/data.dart';
@@ -46,7 +45,7 @@ class NoteRepositoryImpl implements NoteRepository {
 
       final id = await _db.insert(
         'notes',
-        encNote.toMap(),
+        encNote.toDBMap(),
       );
       return (null, id);
     } catch (e) {
