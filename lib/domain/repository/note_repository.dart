@@ -6,7 +6,7 @@ abstract class NoteRepository {
   /// Adds a new note.
   ///
   /// Returns a tuple containing an [AppException] if an error occurs, and the ID of the added note if successful.
-  Future<(AppException?, int?)> addNote(Note note, int userId, String pin);
+  Future<(AppException?, int?)> addNote(Note note, String pin);
 
   /// Updates an existing note.
   ///
@@ -35,5 +35,5 @@ abstract class NoteRepository {
   ///
   /// Takes an integer [id] as a parameter.
   /// Returns a tuple containing an [AppException] if an error occurs, and the decrypted [Note] object if successful.
-  Future<(AppException?, Note?)> dcryptNote(int id);
+  Future<(AppException?, Note?)> dcryptNote(int id, String pin);
 }

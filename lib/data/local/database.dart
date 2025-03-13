@@ -19,7 +19,7 @@ class AppDatabase {
   Future<Database> _initDatabase() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'nort.db');
-    await _deleteDB(path);
+    // await _deleteDB(path);
     log('Database path : $path');
 
     return openDatabase(

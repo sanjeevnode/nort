@@ -28,6 +28,9 @@ class AppCubit extends Cubit<AppState> {
       emit(state.copyWith(user: user));
       log('Init User: $user');
     }
+    if (state.user != null) {
+      await getNotes();
+    }
   }
 
   Future<void> register({
@@ -124,6 +127,23 @@ class AppCubit extends Cubit<AppState> {
 
   ///************* Note *********************/
 
+  /// Get Notes
+  Future<void> getNotes() async {
+    try {
+      emit(state.copyWith(showLoadingOverlay: true));
+      final (err, notes) = await _noteRepository.getNotes();
+      if (err != null) {
+        throw err;
+      }
+      emit(state.copyWith(notes: notes ?? []));
+    } catch (e) {
+      handleError(e.toAppException());
+    } finally {
+      emit(state.copyWith(showLoadingOverlay: false));
+    }
+  }
+
+  /// Add Note
   Future<int?> addNote({
     required String title,
     required String content,
@@ -138,11 +158,13 @@ class AppCubit extends Cubit<AppState> {
       );
       final (err, id) = await _noteRepository.addNote(
         note,
-        state.user!.id!,
         pin,
       );
       if (err != null) {
         throw err;
+      }
+      if (id != null) {
+        await getNotes();
       }
       return id;
     } catch (e) {

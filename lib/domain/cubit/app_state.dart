@@ -10,6 +10,7 @@ class AppState extends Equatable {
     this.navType = NavType.home,
     this.navAction,
     this.showLoadingOverlay = false,
+    this.notes = const [],
   });
 
   final User? user;
@@ -22,6 +23,7 @@ class AppState extends Equatable {
   final Widget? navAction;
 
   final bool showLoadingOverlay;
+  final List<Note> notes;
 
   AppState copyWith({
     User? user,
@@ -32,6 +34,7 @@ class AppState extends Equatable {
     NavType? navType,
     Widget? navAction,
     bool? showLoadingOverlay,
+    List<Note>? notes,
   }) {
     return AppState(
       user: user ?? this.user,
@@ -42,6 +45,7 @@ class AppState extends Equatable {
       navType: navType ?? this.navType,
       navAction: navAction ?? this.navAction,
       showLoadingOverlay: showLoadingOverlay ?? this.showLoadingOverlay,
+      notes: notes ?? this.notes,
     );
   }
 
@@ -55,6 +59,7 @@ class AppState extends Equatable {
         navType,
         navAction,
         showLoadingOverlay,
+        notes,
       ];
 
   @override
