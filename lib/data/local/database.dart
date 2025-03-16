@@ -19,7 +19,7 @@ class AppDatabase {
   Future<Database> _initDatabase() async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, 'nort.db');
-    // await _deleteDB(path);
+    await _deleteDB(path);
     log('Database path : $path');
 
     return openDatabase(
@@ -36,8 +36,8 @@ class AppDatabase {
             masterPassword TEXT, 
             salt TEXT NOT NULL,  
             isVerified INTEGER NOT NULL DEFAULT 0,
-            createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
-            updatedAt TEXT DEFAULT CURRENT_TIMESTAMP
+            createdAt TEXT DEFAULT (datetime('now') || 'Z'),
+            updatedAt TEXT DEFAULT (datetime('now') || 'Z')
           )
         ''');
         // Create Note table
@@ -48,8 +48,8 @@ class AppDatabase {
             title VARCHAR(100) NOT NULL,
             content TEXT NOT NULL,
             salt TEXT NOT NULL,
-            createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
-            updatedAt TEXT DEFAULT CURRENT_TIMESTAMP
+            createdAt TEXT DEFAULT (datetime('now') || 'Z'),
+            updatedAt TEXT DEFAULT (datetime('now') || 'Z')
           )
         ''');
       },

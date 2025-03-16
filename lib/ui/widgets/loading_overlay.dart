@@ -15,11 +15,33 @@ class LoadingOverlay extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.black.withOpacity(0.3),
         body: const Center(
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation(AppColors.dark900),
-            strokeWidth: 2,
-          ),
+          child: LoadingWidget(),
         ),
+      ),
+    );
+  }
+}
+
+class LoadingWidget extends StatelessWidget {
+  const LoadingWidget({
+    super.key,
+    this.size = 24,
+    this.color,
+    this.strokeWidth = 2,
+  });
+
+  final double size;
+  final Color? color;
+  final double strokeWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation(color ?? AppColors.dark900),
+        strokeWidth: strokeWidth,
       ),
     );
   }

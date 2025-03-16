@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -60,15 +59,17 @@ class _NoteListPageState extends State<NoteListPage> {
             width: sc.width,
             child: state.notes.isEmpty
                 ? _emptyScreen()
-                : Column(
-                    children: [
-                      for (var note in state.notes.reversed)
-                        NoteItem(
-                          title: note.title,
-                          lastUpdated: note.updatedAt.toString(),
-                          onTap: () => _onNoteTap(note),
-                        )
-                    ],
+                : ListView.builder(
+                    itemCount: state.notes.length,
+                    itemBuilder: (context, index) {
+                      final note = state.notes.reversed.toList()[index];
+                      final updateAt = DateTime.parse(note.updatedAt!);
+                      return NoteItem(
+                        title: note.title,
+                        lastUpdated: AppUtils.formatDate(updateAt.toLocal()),
+                        onTap: () => _onNoteTap(note),
+                      );
+                    },
                   ),
           ),
         );

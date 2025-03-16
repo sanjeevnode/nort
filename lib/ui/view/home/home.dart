@@ -17,6 +17,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, state) {
+        if (state.showLoadingOverlay) {
+          FocusScope.of(context).unfocus();
+        }
         return LoadingWrapper(
           child: Scaffold(
             backgroundColor: AppColors.light100,

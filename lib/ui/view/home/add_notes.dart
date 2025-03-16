@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:nort/core/core.dart';
@@ -22,15 +23,15 @@ class _AddNotesState extends State<AddNotes> {
   final _scrollController = ScrollController();
 
   Future<void> _handleSave() async {
-    _unfocus();
+    _hideKeyboard();
     if (_titleController.text.isEmpty || _contentController.text.isEmpty) {
       return;
     }
     final pin = await Navigator.pushNamed(context, AppRouteNames.enterPassword);
+    _hideKeyboard();
     if (pin == null) {
       return;
     }
-    _unfocus();
     final title = _titleController.text.trim();
     final content = _contentController.text.trim();
     final id = await context.read<AppCubit>().addNote(
@@ -47,9 +48,13 @@ class _AddNotesState extends State<AddNotes> {
   }
 
   void _unfocus() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      FocusScope.of(context).unfocus();
-    });
+    FocusScope.of(context).unfocus();
+  }
+
+  void _hideKeyboard() {
+    // This uses system channels to directly request keyboard hiding
+    SystemChannels.textInput.invokeMethod('TextInput.hide');
+    _unfocus();
   }
 
   @override
@@ -68,26 +73,32 @@ class _AddNotesState extends State<AddNotes> {
             BlendMode.srcIn,
           ),
         ),
-        actions: [
-          ValueListenableBuilder(
-              valueListenable: _titleController,
-              builder: (context, title, child) {
-                return ValueListenableBuilder(
-                    valueListenable: _contentController,
-                    builder: (context, content, child) {
-                      final isDisabled =
-                          title.text.isEmpty || content.text.isEmpty;
-                      return InkWell(
-                        onTap: _handleSave,
-                        child: Icon(
-                          Icons.check_sharp,
-                          color: isDisabled ? Colors.grey : AppColors.dark900,
-                          size: 24,
-                        ),
-                      );
-                    });
-              }),
-        ],
+      ),
+      floatingActionButton: ValueListenableBuilder(
+        valueListenable: _titleController,
+        builder: (context, title, child) {
+          return ValueListenableBuilder(
+            valueListenable: _contentController,
+            builder: (context, content, child) {
+              final isDisabled = title.text.isEmpty || content.text.isEmpty;
+              return FloatingActionButton(
+                backgroundColor:
+                    isDisabled ? AppColors.primary500 : AppColors.primary,
+                onPressed: () {
+                  if (isDisabled) {
+                    return;
+                  }
+                  _hideKeyboard();
+                  _handleSave();
+                },
+                child: const Icon(
+                  Icons.check,
+                  color: AppColors.light100,
+                ),
+              );
+            },
+          );
+        },
       ),
       body: GestureDetector(
         onTap: () {
