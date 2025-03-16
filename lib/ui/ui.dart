@@ -9,6 +9,7 @@ export 'view/home/home.dart';
 export 'view/home/note_list_page.dart';
 export 'view/home/profile.dart';
 export 'view/home/settings.dart';
+export 'view/home/edit_note_page.dart';
 export 'widgets/app_bottom_sheet.dart';
 export 'widgets/app_button.dart';
 export 'widgets/app_text_field.dart';

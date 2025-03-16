@@ -13,9 +13,9 @@ class App extends StatelessWidget {
   const App({
     super.key,
     required AppCubit appCubit,
-  })  : _appCubit= appCubit;
+  }) : _appCubit = appCubit;
 
-final AppCubit _appCubit;
+  final AppCubit _appCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -38,33 +38,35 @@ class _AppView extends StatefulWidget {
 class _AppViewState extends State<_AppView> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AppCubit,AppState>(
-      builder: (context,state) {
-        final screen = state.user != null ? state.user!.masterPassword==null ? const Onboarding() :const HomePage() : const LoginScreen();
-        return MaterialApp(
-          scaffoldMessengerKey: Toast.scaffoldKey,
-          theme: AppTheme.standard,
-          title: 'Nort',
-          debugShowCheckedModeBanner: false,
-          builder: (context, widget) {
-            return MediaQuery(
-              data: MediaQuery.of(context).copyWith(
-                textScaler: TextScaler.noScaling,
-              ),
-              child: Stack(
-                children: [
-                  ScrollConfiguration(
-                    behavior: const ScrollBehaviorModified(),
-                    child: widget!,
-                  ),
-                ],
-              ),
-            );
-          },
-          onGenerateRoute: AppRouter.onGenerateRoute,
-          home: screen,
-        );
-      }
-    );
+    return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
+      final screen = state.user != null
+          ? state.user!.masterPassword == null
+              ? const Onboarding()
+              : const HomePage()
+          : const LoginScreen();
+      return MaterialApp(
+        scaffoldMessengerKey: Toast.scaffoldKey,
+        theme: AppTheme.standard,
+        title: 'Nort',
+        debugShowCheckedModeBanner: false,
+        builder: (context, widget) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(
+              textScaler: TextScaler.noScaling,
+            ),
+            child: Stack(
+              children: [
+                ScrollConfiguration(
+                  behavior: const ScrollBehaviorModified(),
+                  child: widget!,
+                ),
+              ],
+            ),
+          );
+        },
+        onGenerateRoute: AppRouter.onGenerateRoute,
+        home: screen,
+      );
+    });
   }
 }

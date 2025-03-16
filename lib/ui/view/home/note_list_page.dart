@@ -1,4 +1,4 @@
-import 'dart:developer';
+// ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,7 +19,21 @@ class _NoteListPageState extends State<NoteListPage> {
   Future<void> _onNoteTap(Note note) async {
     final pass =
         await Navigator.pushNamed(context, AppRouteNames.enterPassword);
-    log('password: get $pass');
+    if (pass == null) {
+      return;
+    }
+    final decNote = await context.read<AppCubit>().getDcryptedNote(
+          id: note.id!,
+          pin: pass.toString(),
+        );
+    if (decNote != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => EditNotePage(note: decNote),
+        ),
+      );
+    }
   }
 
   @override

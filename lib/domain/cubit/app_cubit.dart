@@ -67,6 +67,9 @@ class AppCubit extends Cubit<AppState> {
     }
     await _userRepository.setLoggedInUser(id: user.id!);
     emit(state.copyWith(loginStatus: Status.success, user: user));
+    if (state.user != null) {
+      await getNotes();
+    }
   }
 
   Future<void> logout() async {
@@ -157,6 +160,55 @@ class AppCubit extends Cubit<AppState> {
         content: content,
       );
       final (err, id) = await _noteRepository.addNote(
+        note,
+        pin,
+      );
+      if (err != null) {
+        throw err;
+      }
+      if (id != null) {
+        await getNotes();
+      }
+      return id;
+    } catch (e) {
+      handleError(e.toAppException());
+      return null;
+    } finally {
+      emit(state.copyWith(showLoadingOverlay: false));
+    }
+  }
+
+  /// Get Dcrypted Note
+  Future<Note?> getDcryptedNote({
+    required int id,
+    required String pin,
+  }) async {
+    try {
+      emit(state.copyWith(showLoadingOverlay: true));
+      final (err, note) = await _noteRepository.dcryptNote(
+        id,
+        pin,
+      );
+      if (err != null) {
+        throw err;
+      }
+      return note;
+    } catch (e) {
+      handleError(e.toAppException());
+      return null;
+    } finally {
+      emit(state.copyWith(showLoadingOverlay: false));
+    }
+  }
+
+  /// Update Note
+  Future<int?> updateNote({
+    required Note note,
+    required String pin,
+  }) async {
+    try {
+      emit(state.copyWith(showLoadingOverlay: true));
+      final (err, id) = await _noteRepository.updateNote(
         note,
         pin,
       );

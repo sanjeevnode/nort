@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nort/core/core.dart';
+import 'package:nort/domain/domain.dart';
 
 class LoadingOverlay extends StatelessWidget {
   const LoadingOverlay({super.key});
@@ -20,5 +22,22 @@ class LoadingOverlay extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class LoadingWrapper extends StatelessWidget {
+  const LoadingWrapper({super.key, required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppCubit, AppState>(builder: (context, state) {
+      return Stack(
+        children: [
+          child,
+          if (state.showLoadingOverlay) const LoadingOverlay(),
+        ],
+      );
+    });
   }
 }

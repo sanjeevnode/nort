@@ -80,3 +80,10 @@ class UserNotLoggedInException extends AppException {
   });
 }
 
+class NoteNotFoundException extends AppException {
+  NoteNotFoundException({
+    super.code,
+    super.message = 'Note not found',
+    super.data,
+  });
+}

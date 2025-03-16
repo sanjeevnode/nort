@@ -17,15 +17,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return BlocBuilder<AppCubit, AppState>(
       builder: (context, state) {
-        return Stack(
-          children: [
-            Scaffold(
-              backgroundColor: AppColors.light100,
-              bottomNavigationBar: const Navbar(),
-              body: state.navType.screen,
-            ),
-            if (state.showLoadingOverlay) const LoadingOverlay(),
-          ],
+        return LoadingWrapper(
+          child: Scaffold(
+            backgroundColor: AppColors.light100,
+            bottomNavigationBar: const Navbar(),
+            body: state.navType.screen,
+          ),
         );
       },
     );

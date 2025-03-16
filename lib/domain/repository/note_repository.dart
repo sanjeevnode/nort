@@ -12,7 +12,7 @@ abstract class NoteRepository {
   ///
   /// Takes a [Note] object as a parameter.
   /// Returns a tuple containing an [AppException] if an error occurs, and the ID of the updated note if successful.
-  Future<(AppException?, int?)> updateNote(Note note);
+  Future<(AppException?, int?)> updateNote(Note note, String pin);
 
   /// Deletes an existing note.
   ///

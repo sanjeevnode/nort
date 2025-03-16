@@ -138,7 +138,7 @@ class _EnterMasterPasswordState extends State<EnterMasterPassword> {
                           child: const Center(
                             child: Icon(
                               Icons.backspace_outlined,
-                              color: Color.fromARGB(255, 0, 63, 146),
+                              color: AppColors.dark900,
                             ),
                           ),
                         ),
@@ -164,7 +164,7 @@ class _EnterMasterPasswordState extends State<EnterMasterPassword> {
                           child: Center(
                             child: Icon(
                               Icons.check_circle_sharp,
-                              color: const Color.fromARGB(255, 0, 63, 146),
+                              color: AppColors.dark900,
                               size: (w + h) / 2 * .5,
                             ),
                           ),
@@ -207,7 +207,7 @@ class NumberContainer extends StatelessWidget {
             child: Text(
               text,
               style: AppTextStyle.text2xlRegular.copyWith(
-                color: const Color.fromARGB(255, 0, 63, 146),
+                color: AppColors.dark900,
               ),
             ),
           ),

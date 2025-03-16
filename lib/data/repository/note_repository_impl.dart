@@ -25,16 +25,21 @@ class NoteRepositoryImpl implements NoteRepository {
     return userId;
   }
 
+  Future<User?> get user async {
+    final userId = await this.userId;
+    final (_, user) = await _userRepository.getUser(
+      id: userId,
+    );
+    return user;
+  }
+
   @override
   Future<(AppException?, int?)> addNote(
     Note note,
     String pin,
   ) async {
     try {
-      final userId = await this.userId;
-      final (_, user) = await _userRepository.getUser(
-        id: int.tryParse(userId.toString()),
-      );
+      final user = await this.user;
       if (user == null) {
         return (UserNotFoundException(), null);
       }
@@ -52,7 +57,7 @@ class NoteRepositoryImpl implements NoteRepository {
       final salt = await EncryptionService.generateSalt();
       final key = await EncryptionService.generateKey(pin, salt);
       final text = await EncryptionService.encryptText(note.content, key);
-      final encNote = note.copyWith(content: text, userId: userId, salt: salt);
+      final encNote = note.copyWith(content: text, userId: user.id, salt: salt);
 
       final noteId = await _db.insert(
         'notes',
@@ -65,9 +70,35 @@ class NoteRepositoryImpl implements NoteRepository {
   }
 
   @override
-  Future<(AppException?, Note?)> dcryptNote(int id, String pin) {
-    // TODO: implement dcryptNote
-    throw UnimplementedError();
+  Future<(AppException?, Note?)> dcryptNote(int id, String pin) async {
+    try {
+      final user = await this.user;
+      if (user == null) {
+        return (UserNotFoundException(), null);
+      }
+      // Get note by id
+      final (error, note) = await getNoteById(id);
+      if (error != null || note == null) {
+        return (error, null);
+      }
+
+      // Check for valid pin
+      final isValid = SecureHash.compare(
+        pin,
+        user.salt!,
+        user.masterPassword!,
+      );
+      if (!isValid) {
+        return (InvalidCredentialsException(), null);
+      }
+
+      final key = await EncryptionService.generateKey(pin, note.salt!);
+      final text = await EncryptionService.decryptText(note.content, key);
+      final decNote = note.copyWith(content: text);
+      return (null, decNote);
+    } catch (e) {
+      return (e.toAppException(), null);
+    }
   }
 
   @override
@@ -77,9 +108,21 @@ class NoteRepositoryImpl implements NoteRepository {
   }
 
   @override
-  Future<(AppException?, Note?)> getNoteById(int id) {
-    // TODO: implement getNoteById
-    throw UnimplementedError();
+  Future<(AppException?, Note?)> getNoteById(int id) async {
+    try {
+      final userId = await this.userId;
+      final note = await _db.query(
+        'notes',
+        where: 'id = ? AND userId = ?',
+        whereArgs: [id, userId],
+      );
+      if (note.isEmpty) {
+        return (NoteNotFoundException(), null);
+      }
+      return (null, Note.fromMap(note.first));
+    } catch (e) {
+      return (e.toAppException(), null);
+    }
   }
 
   @override
@@ -99,8 +142,38 @@ class NoteRepositoryImpl implements NoteRepository {
   }
 
   @override
-  Future<(AppException?, int?)> updateNote(Note note) {
-    // TODO: implement updateNote
-    throw UnimplementedError();
+  Future<(AppException?, int?)> updateNote(Note note, String pin) async {
+    try {
+      final user = await this.user;
+      if (user == null) {
+        return (UserNotFoundException(), null);
+      }
+
+      // Check for valid pin
+      final isValid = SecureHash.compare(
+        pin,
+        user.salt!,
+        user.masterPassword!,
+      );
+      if (!isValid) {
+        return (InvalidCredentialsException(), null);
+      }
+
+      final salt = await EncryptionService.generateSalt();
+      final key = await EncryptionService.generateKey(pin, salt);
+      final text = await EncryptionService.encryptText(note.content, key);
+      final encNote = note.copyWith(content: text, userId: user.id, salt: salt);
+
+      final noteId = await _db.update(
+        'notes',
+        encNote.toDBMap(),
+        where: 'id = ? AND userId = ?',
+        whereArgs: [note.id, user.id],
+      );
+
+      return (null, noteId);
+    } catch (e) {
+      return (e.toAppException(), null);
+    }
   }
 }
