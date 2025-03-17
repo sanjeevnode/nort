@@ -79,7 +79,7 @@ class _NoteListPageState extends State<NoteListPage> {
 
   Widget _emptyScreen() {
     return Center(
-      child: Column(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           InkWell(
@@ -87,18 +87,18 @@ class _NoteListPageState extends State<NoteListPage> {
               context.read<AppCubit>().setNav(NavType.addNotes);
             },
             child: SvgPicture.asset(
-              'assets/icons/empty.svg',
-              width: 88,
-              height: 88,
+              'assets/icons/add.svg',
+              width: 24,
+              height: 24,
               colorFilter: const ColorFilter.mode(
                 AppColors.dark100,
                 BlendMode.srcIn,
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(width: 10),
           Text(
-            'Add a note to get started.',
+            'Add a Note',
             textAlign: TextAlign.center,
             style: AppTextStyle.textXlRegular.copyWith(
               color: AppColors.dark100,
