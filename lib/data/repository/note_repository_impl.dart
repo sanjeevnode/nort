@@ -102,9 +102,18 @@ class NoteRepositoryImpl implements NoteRepository {
   }
 
   @override
-  Future<(AppException?, int?)> deleteNote(Note note) {
-    // TODO: implement deleteNote
-    throw UnimplementedError();
+  Future<(AppException?, bool)> deleteNote(Note note) async {
+    try {
+      final userId = await this.userId;
+      final count = await _db.delete(
+        'notes',
+        where: 'id = ? AND userId = ?',
+        whereArgs: [note.id, userId],
+      );
+      return (null, count > 0);
+    } catch (e) {
+      return (e.toAppException(), false);
+    }
   }
 
   @override

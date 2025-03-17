@@ -53,6 +53,13 @@ class _EditNotePageState extends State<EditNotePage> {
     _unfocus();
   }
 
+  Future<void> _handleDelete() async {
+    await context.read<AppCubit>().deleteNote(
+          note: widget.note,
+        );
+    Navigator.pop(context);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -85,6 +92,7 @@ class _EditNotePageState extends State<EditNotePage> {
             ),
             actions: [
               InkWell(
+                onTap: _handleDelete,
                 child: SvgPicture.asset(
                   'assets/icons/delete.svg',
                   width: 24,

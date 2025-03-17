@@ -226,4 +226,28 @@ class AppCubit extends Cubit<AppState> {
       emit(state.copyWith(showLoadingOverlay: false));
     }
   }
+
+  /// Delete Note
+  Future<bool> deleteNote({
+    required Note note,
+  }) async {
+    try {
+      emit(state.copyWith(showLoadingOverlay: true));
+      final (err, deleted) = await _noteRepository.deleteNote(
+        note,
+      );
+      if (err != null) {
+        throw err;
+      }
+      if (deleted) {
+        await getNotes();
+      }
+      return deleted;
+    } catch (e) {
+      handleError(e.toAppException());
+      return false;
+    } finally {
+      emit(state.copyWith(showLoadingOverlay: false));
+    }
+  }
 }

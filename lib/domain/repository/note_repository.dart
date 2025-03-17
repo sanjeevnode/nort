@@ -18,7 +18,7 @@ abstract class NoteRepository {
   ///
   /// Takes a [Note] object as a parameter.
   /// Returns a tuple containing an [AppException] if an error occurs, and the ID of the deleted note if successful.
-  Future<(AppException?, int?)> deleteNote(Note note);
+  Future<(AppException?, bool)> deleteNote(Note note);
 
   /// Retrieves all notes.
   ///
