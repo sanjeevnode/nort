@@ -75,7 +75,7 @@ class _EditNotePageState extends State<EditNotePage> {
             title: 'Edit Note',
             enableBack: true,
             prefix: SvgPicture.asset(
-              'assets/icons/add.svg',
+              'assets/icons/edit-note.svg',
               width: 24,
               height: 24,
               colorFilter: const ColorFilter.mode(
@@ -83,6 +83,16 @@ class _EditNotePageState extends State<EditNotePage> {
                 BlendMode.srcIn,
               ),
             ),
+            actions: [
+              InkWell(
+                child: SvgPicture.asset(
+                  'assets/icons/delete.svg',
+                  width: 24,
+                  height: 24,
+                  color: AppColors.error900,
+                ),
+              )
+            ],
           ),
           floatingActionButton: ValueListenableBuilder(
             valueListenable: _titleController,
